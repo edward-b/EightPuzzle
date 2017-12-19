@@ -71,11 +71,23 @@ public class EightPuzzleSearch {
 		start[xj][yj] = temp;
 	}
 	
-	public static int countInversions() {
+	public static int countInversions(int i, int j) {
 		int inversions = 0;
 		return inversions;
 	}
 	
+	public static int sumInversions()
+	{
+		int inversions = 0;
+		
+		for(int i = 0; i < tileCount; i++) {
+			for(int j = 0; j < tileCount; j++) {
+				inversions += countInversions(i, j);
+			}
+		}
+		
+		return inversions;
+	}
 	
 	/*
 	 * Implementation of A* search with repeated state checking
