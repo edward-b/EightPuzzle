@@ -42,8 +42,6 @@ public class EightPuzzleSearch {
 		e = new EightPuzzleNode(3, start, goal, null, 0, "START");
 		
 		aStarSearch(e);
-		
-		System.out.println("ass");
 	}
 	
 	
@@ -119,7 +117,6 @@ public class EightPuzzleSearch {
 	        
 	        iteration++;
 	    }
-		System.out.println("fuck");
 	}
 	
 	
