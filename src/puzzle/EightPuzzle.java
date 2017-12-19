@@ -1,11 +1,14 @@
+package puzzle;
+import node.EightPuzzleNode;
+import search.EightPuzzleSearch;
+
 public class EightPuzzle {
 	
 	public static final int[][] goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 	private static int[][] start = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 	
 	private static int tileCount = 3; // height and width of the puzzle
-	
-	
+ 
 	/*
 	 * Main loop of the search. Takes user input for difficulty
 	 * then takes user input for search type. Continues taking

@@ -1,4 +1,7 @@
+package node;
 import java.util.ArrayList;
+
+import puzzle.EightPuzzle;
 
 public class EightPuzzleNode {
 	private EightPuzzleNode parent;		// this node's parent node, or previous state
