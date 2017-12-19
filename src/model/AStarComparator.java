@@ -1,7 +1,5 @@
-package search;
+package model;
 import java.util.Comparator;
-
-import node.EightPuzzleNode;
 
 public class AStarComparator implements Comparator<EightPuzzleNode>
 {

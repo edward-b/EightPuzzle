@@ -1,7 +1,5 @@
-package node;
+package model;
 import java.util.ArrayList;
-
-import puzzle.EightPuzzle;
 
 public class EightPuzzleNode {
 	private EightPuzzleNode parent;		// this node's parent node, or previous state
@@ -57,7 +55,7 @@ public class EightPuzzleNode {
 		for(int i = 0; i < size; i++) {		// iterates through entire currentState and
 			for(int j = 0; j < size; j++) {	// compares with goalState for each tile
 				if(currentState[i][j] != 0) {
-					if(currentState[i][j] != EightPuzzle.goal[i][j]) {
+					if(currentState[i][j] != EightPuzzleModel.goal[i][j]) {
 						count++;
 					}
 				}
@@ -77,8 +75,8 @@ public class EightPuzzleNode {
 		for(int i = 0; i < size; i++) {			// iterates through entire currentState and
 			for(int j = 0; j < size; j++) {		// computes absolute value of distance needed to
 				if(currentState[i][j] != 0) {	// travel vertically and horizontally to get to the 
-					if(currentState[i][j] != EightPuzzle.goal[i][j]) {	// goal position for each tile
-						int[] goalCoordinates = getCoordinates(currentState[i][j], EightPuzzle.goal);
+					if(currentState[i][j] != EightPuzzleModel.goal[i][j]) {	// goal position for each tile
+						int[] goalCoordinates = getCoordinates(currentState[i][j], EightPuzzleModel.goal);
 						sum += (Math.abs(goalCoordinates[0] - i) + Math.abs(goalCoordinates[1] - j));
 					}
 				}
@@ -214,7 +212,7 @@ public class EightPuzzleNode {
 	public boolean isGoal() {
 		for(int i = 0; i < size; i++) {
 			for(int j = 0; j < size; j++) {
-				if(currentState[i][j] != EightPuzzle.goal[i][j]) {
+				if(currentState[i][j] != EightPuzzleModel.goal[i][j]) {
 					return false;
 				}
 			}
