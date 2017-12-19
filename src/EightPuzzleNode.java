@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class EightPuzzleNode {
 	private EightPuzzleNode parent;		// this node's parent node, or previous state
 	private int[][] currentState;		// this node's state
-	private int[][] goalState;			// this node's goal state
 	private int depth;					// number of nodes away from the root
 	private int misplacedTiles;			// number of misplaced tiles
 	private int manhattanDistance;		// Manhattan distance
@@ -19,18 +18,16 @@ public class EightPuzzleNode {
 	 * Manhattan distance, and depth of the node.
 	 */
 	
-	public EightPuzzleNode(int size, int[][] current, int[][] goal, EightPuzzleNode p, int cost, String action) {
+	public EightPuzzleNode(int size, int[][] current, EightPuzzleNode p, int cost, String action) {
 		this.size = size;
 		this.action = action;
 		this.cost = cost;
 		
 		currentState = new int[size][size];
-		goalState = new int[size][size];
 		
 		for(int i = 0; i < size; i++) {
 			for(int j = 0; j < size; j++) {
 				currentState[i][j] = current[i][j];
-				goalState[i][j] = goal[i][j];
 			}
 		}
 		
@@ -57,7 +54,7 @@ public class EightPuzzleNode {
 		for(int i = 0; i < size; i++) {		// iterates through entire currentState and
 			for(int j = 0; j < size; j++) {	// compares with goalState for each tile
 				if(currentState[i][j] != 0) {
-					if(currentState[i][j] != goalState[i][j]) {
+					if(currentState[i][j] != EightPuzzle.goal[i][j]) {
 						count++;
 					}
 				}
@@ -77,8 +74,8 @@ public class EightPuzzleNode {
 		for(int i = 0; i < size; i++) {			// iterates through entire currentState and
 			for(int j = 0; j < size; j++) {		// computes absolute value of distance needed to
 				if(currentState[i][j] != 0) {	// travel vertically and horizontally to get to the 
-					if(currentState[i][j] != goalState[i][j]) {	// goal position for each tile
-						int[] goalCoordinates = getCoordinates(currentState[i][j], goalState);
+					if(currentState[i][j] != EightPuzzle.goal[i][j]) {	// goal position for each tile
+						int[] goalCoordinates = getCoordinates(currentState[i][j], EightPuzzle.goal);
 						sum += (Math.abs(goalCoordinates[0] - i) + Math.abs(goalCoordinates[1] - j));
 					}
 				}
@@ -154,7 +151,7 @@ public class EightPuzzleNode {
 		copy[x2][y2] = copy[x1][y1];
 		copy[x1][y1] = temp;
 		
-		EightPuzzleNode successor = new EightPuzzleNode(size, copy, goalState, this, 1, s);
+		EightPuzzleNode successor = new EightPuzzleNode(size, copy, this, 1, s);
 		
 		if(parent != null) {
 			if(!successor.equals(parent)) {
@@ -214,7 +211,7 @@ public class EightPuzzleNode {
 	public boolean isGoal() {
 		for(int i = 0; i < size; i++) {
 			for(int j = 0; j < size; j++) {
-				if(currentState[i][j] != goalState[i][j]) {
+				if(currentState[i][j] != EightPuzzle.goal[i][j]) {
 					return false;
 				}
 			}
