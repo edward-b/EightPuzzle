@@ -20,6 +20,17 @@ public class EightPuzzle {
 		// initialize the start state with random values
 		initTiles();
 		
+		if(!isSolvable()) {
+			if((start[0][0] != 0) && (start[0][1] != 0)) {
+				swapTiles(0, 0, 0, 1);
+			}
+			else {
+				swapTiles(tileCount - 2, tileCount - 1, tileCount - 1, tileCount - 1);
+			}
+		}
+		
+		countInversions();
+		
 		e = new EightPuzzleNode(tileCount, start, null, 0, "START");
 		
 		EightPuzzleSearch.aStarSearch(e);
@@ -48,21 +59,36 @@ public class EightPuzzle {
 		start[xj][yj] = temp;
 	}
 	
-	public static int countInversions(int i, int j) {
-		int inversions = 0;
-		return inversions;
-	}
-	
-	public static int sumInversions()
+	public static int countInversions()
 	{
 		int inversions = 0;
+		int tileNum = tileCount * tileCount;
+		int[] temp = new int[tileNum];
+		int count = 0;
 		
+		// converts 2d array to 1d array for easier inversion counting code
 		for(int i = 0; i < tileCount; i++) {
 			for(int j = 0; j < tileCount; j++) {
-				inversions += countInversions(i, j);
+				temp[count] = start[i][j];
+				count++;
 			}
 		}
 		
+		
+		for (int i = 0; i < tileNum - 1; i++) {
+			 for (int j = i + 1; j < tileNum; j++) {
+				 if ((temp[i] != 0) && (temp[j] != 0) &&  (temp[i] > temp[j])) {
+					 inversions++;
+				 }
+			 }
+		}
+		
+		System.out.println("Number of inversions: " + inversions);
+		
 		return inversions;
+	}
+	
+	public static boolean isSolvable() {
+		return (countInversions() % 2 == 0);
 	}
 }
