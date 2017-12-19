@@ -1,4 +1,7 @@
 package puzzle;
+import java.awt.EventQueue;
+
+import gui.EightPuzzleGUI;
 import node.EightPuzzleNode;
 import search.EightPuzzleSearch;
 
@@ -16,27 +19,38 @@ public class EightPuzzle {
 	 */
 	
 	public static void main (String args[]) {
-		EightPuzzleNode e = null;
-		
-		System.out.println("Eight Puzzle Solver by Edward Ryan Bote");
-		
-		// initialize the start state with random values
-		initTiles();
-		
-		if(!isSolvable()) {
-			if((start[0][0] != 0) && (start[0][1] != 0)) {
-				swapTiles(0, 0, 0, 1);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EightPuzzleGUI window = new EightPuzzleGUI();
+					window.getFrame().setVisible(true);
+					
+					EightPuzzleNode e = null;
+					
+					System.out.println("Eight Puzzle Solver by Edward Ryan Bote");
+					
+					// initialize the start state with random values
+					initTiles();
+					
+					if(!isSolvable()) {
+						if((start[0][0] != 0) && (start[0][1] != 0)) {
+							swapTiles(0, 0, 0, 1);
+						}
+						else {
+							swapTiles(tileCount - 2, tileCount - 1, tileCount - 1, tileCount - 1);
+						}
+					}
+					
+					countInversions();
+					
+					e = new EightPuzzleNode(tileCount, start, null, 0, "START");
+					
+					EightPuzzleSearch.aStarSearch(e);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			else {
-				swapTiles(tileCount - 2, tileCount - 1, tileCount - 1, tileCount - 1);
-			}
-		}
-		
-		countInversions();
-		
-		e = new EightPuzzleNode(tileCount, start, null, 0, "START");
-		
-		EightPuzzleSearch.aStarSearch(e);
+		});
 	}
 	
 	public static void initTiles() {
