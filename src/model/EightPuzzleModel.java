@@ -4,10 +4,8 @@ public class EightPuzzleModel {
 	
 	public static final int[][] goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 	private static int[][] currState;
-	private int zeroX;
-	private int zeroY;
-	
 	private static final int tileCount = 3; // height and width of the puzzle
+	private int zeroX, zeroY = tileCount - 1;
 	
 	public EightPuzzleModel() {
 		generateNewPuzzle();
@@ -78,8 +76,6 @@ public class EightPuzzleModel {
 				 }
 			 }
 		}
-		
-		System.out.println("Number of inversions: " + inversions);
 		
 		return inversions;
 	}

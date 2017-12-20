@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -26,6 +25,8 @@ public class EightPuzzleGUI {
 	private JButton btnSolvePuzzle = new JButton("Solve Puzzle");
 	private JLabel lblMoveList = new JLabel("Move List");
 	private JScrollPane moveListPane = new JScrollPane(new JTextArea());
+	private JViewport moveListView = moveListPane.getViewport();
+	private JTextArea moveListTextArea = (JTextArea)moveListView.getView();
 	
 	/**
 	 * Create the application.
@@ -80,6 +81,8 @@ public class EightPuzzleGUI {
 		springLayout.putConstraint(SpringLayout.EAST, btnSolvePuzzle, -10, SpringLayout.EAST, eightPuzzleFrame.getContentPane());
 		btnSolvePuzzle.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		eightPuzzleFrame.getContentPane().add(btnSolvePuzzle);
+		
+		moveListTextArea.setEditable(false);
 	}
 	
 	public void setTiles(int[][] currState) {
@@ -113,22 +116,34 @@ public class EightPuzzleGUI {
 	}
 	
 	public void updateMoveList(String str) {
-		JViewport moveListView = moveListPane.getViewport();
-		JTextArea text = (JTextArea)moveListView.getView();
-		text.setEditable(false);
-		text.append(str + "\n");
+		moveListTextArea.append(str + "\n");
 	}
 	
 	public void clearMoveList() {
-		JViewport moveListView = moveListPane.getViewport();
-		moveListView.removeAll();
+		moveListTextArea.setText("");
 	}
 
 	public void addGenerateNewPuzzleListener(ActionListener listener) {
 		btnGenerateNewPuzzle.addActionListener(listener);
 	}
 	
+	public void enableGenerateNewPuzzleButton() {
+		btnGenerateNewPuzzle.setEnabled(true);
+	}
+	
+	public void disableGenerateNewPuzzleButton() {
+		btnGenerateNewPuzzle.setEnabled(false);
+	}
+	
 	public void addSolvePuzzleListener(ActionListener listener) {
 		btnSolvePuzzle.addActionListener(listener);
+	}
+	
+	public void enableSolvePuzzleButton() {
+		btnSolvePuzzle.setEnabled(true);
+	}
+	
+	public void disableSolvePuzzleButton() {
+		btnSolvePuzzle.setEnabled(false);
 	}
 }

@@ -1,13 +1,10 @@
 package controller;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
-import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.SwingWorker;
-import javax.swing.Timer;
 
 import model.EightPuzzleModel;
 import model.EightPuzzleNode;
@@ -18,7 +15,6 @@ public class EightPuzzleController {
 	
 	private EightPuzzleModel model;
 	private EightPuzzleGUI view;
-	private PrintSolution print;
 	
 	public EightPuzzleController (EightPuzzleModel model, EightPuzzleGUI view) {
 		this.model = model;
@@ -38,7 +34,7 @@ public class EightPuzzleController {
 	    
 	    view.addSolvePuzzleListener(new ActionListener() {
 	      public void actionPerformed(ActionEvent e) {
-	        (print = new PrintSolution()).execute();
+	    	  (new PrintSolution()).execute();
 	      }
 	    });
 	    
@@ -59,6 +55,10 @@ public class EightPuzzleController {
     private class PrintSolution extends SwingWorker<Void, EightPuzzleNode> {
         @Override
         protected Void doInBackground() {
+
+        	view.disableGenerateNewPuzzleButton();
+        	view.disableSolvePuzzleButton();
+        	
         	EightPuzzleNode currNode = new EightPuzzleNode(3, model.getCurrState(), null, 0, "START");
 	        EightPuzzleNode solution = EightPuzzleSearch.aStarSearch(currNode);
 	        
@@ -80,6 +80,10 @@ public class EightPuzzleController {
                     System.out.println("Background interrupted");
                 }
             }
+            
+            view.enableGenerateNewPuzzleButton();
+            view.enableSolvePuzzleButton();
+            
             return null;
         }
 
@@ -89,6 +93,11 @@ public class EightPuzzleController {
             view.updateMoveList("Empty space shifted: " + currNode.getAction());
 			model.updateTiles(currNode.getCurrentState());
 			view.setTiles(model.getCurrState());
+        }
+        
+        @Override
+        protected void done() {
+        	
         }
     }
 }

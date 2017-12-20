@@ -5,9 +5,6 @@ import java.awt.*;
 import view.EightPuzzleGUI;
 import model.EightPuzzleModel;
 
-/**
- * MVP version of https://stackoverflow.com/q/3066590/230513
- */
 public class EightPuzzle implements Runnable
 {
   public static void main(String[] args) {

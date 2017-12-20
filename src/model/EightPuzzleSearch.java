@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
 public class EightPuzzleSearch {
 	
@@ -22,9 +21,9 @@ public class EightPuzzleSearch {
 	
 	public static EightPuzzleNode aStarSearch(EightPuzzleNode root) {
 		if (root != null) {
-			long startTime = System.nanoTime();
-			int iteration = 0;
 			int space = 0;
+			visited = new HashSet<String>();
+			inQueue = new HashMap<String, Integer>();
 			// uses comparator that sorts priority queue by total path cost + number of misplaced tiles
 			Comparator<EightPuzzleNode> comparator = new AStarComparator();
 			PriorityQueue<EightPuzzleNode> pQueue = new PriorityQueue<EightPuzzleNode>(comparator);
@@ -36,15 +35,6 @@ public class EightPuzzleSearch {
 		        inQueue.remove(node.generateNumberString());
 		        
 		        if(node.isGoal()) {
-		        	iteration++;
-		        	long endTime = System.nanoTime();
-		        	long duration = (endTime - startTime);
-		        	
-		        	System.out.println("A* search (h = Manhattan distance) took: " + duration / 1000000 + " milliseconds.");
-		        	System.out.println("Path length: " + node.getDepth());
-		        	System.out.println("Path cost: " + node.pathCost());
-		        	System.out.println("Number of nodes popped off queue: " + iteration);
-		        	System.out.println("Maximum space used: " + space + " nodes.");
 		        	return node;
 		        }
 		        
@@ -75,44 +65,9 @@ public class EightPuzzleSearch {
 		        		}
 		        	}
 		        }
-		        
-		        iteration++;
 		    }
 		}
 		
 		return null;
-	}
-	
-	
-	/*
-	 * Prints solution path found by searches and
-	 * data about the path including: actions taken by nodes,
-	 * depth of nodes, cost of individual nodes, and path cost.
-	 */
-	public static void printSolution(EightPuzzleNode leaf) {
-		if(leaf == null) { // argument validation
-			return;
-		}
-		
-		System.out.println("Puzzle Solved!\nPrinting Solution Path:");
-		
-		Stack<EightPuzzleNode> printStack = new Stack<EightPuzzleNode>();
-		EightPuzzleNode currNode = leaf;
-		
-		while(currNode != null) { 			// traces up from leaf to root, putting nodes
-			printStack.push(currNode); 		// in correct order on the stack
-			currNode = currNode.getParent();
-		}
-		
-		while(!printStack.isEmpty()) {
-			currNode = printStack.pop();
-			
-			currNode.printNode();
-			System.out.println("Action: " + currNode.getAction());
-			System.out.println("Depth: " + currNode.getDepth());
-	        System.out.println("Cost of current node: " + currNode.getCost());
-	        System.out.println("Total path cost: " + currNode.pathCost());
-	        System.out.println("-------");
-		}
 	}
 }
