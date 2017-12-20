@@ -2,6 +2,12 @@ package controller;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
+import java.util.Random;
+import java.util.Stack;
+
+import javax.swing.SwingWorker;
+import javax.swing.Timer;
 
 import model.EightPuzzleModel;
 import model.EightPuzzleNode;
@@ -12,6 +18,7 @@ public class EightPuzzleController {
 	
 	private EightPuzzleModel model;
 	private EightPuzzleGUI view;
+	private PrintSolution print;
 	
 	public EightPuzzleController (EightPuzzleModel model, EightPuzzleGUI view) {
 		this.model = model;
@@ -19,14 +26,19 @@ public class EightPuzzleController {
 	}
 	
 	public void start() {
-	    view.setTiles(model.getCurrState());
+		view.setTiles(model.getCurrState());
 
-	    view.addGenerateNewPuzzleListener(new ActionListener()
-	    {
-	      public void actionPerformed(ActionEvent e)
-	      {
-	        model.generateNewPuzzle();
-	        view.setTiles(model.getCurrState());
+	    view.addGenerateNewPuzzleListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent e) {
+	    	  view.clearMoveList();
+	    	  model.generateNewPuzzle();
+	    	  view.setTiles(model.getCurrState());
+	      }
+	    });
+	    
+	    view.addSolvePuzzleListener(new ActionListener() {
+	      public void actionPerformed(ActionEvent e) {
+	        (print = new PrintSolution()).execute();
 	      }
 	    });
 	    
@@ -44,7 +56,39 @@ public class EightPuzzleController {
 	    }*/
 	}
 	
-	private void tileSelected() {
-		
-	}
+    private class PrintSolution extends SwingWorker<Void, EightPuzzleNode> {
+        @Override
+        protected Void doInBackground() {
+        	EightPuzzleNode currNode = new EightPuzzleNode(3, model.getCurrState(), null, 0, "START");
+	        EightPuzzleNode solution = EightPuzzleSearch.aStarSearch(currNode);
+	        
+        	Stack<EightPuzzleNode> printStack = new Stack<EightPuzzleNode>();
+    		
+    		while(solution != null) { 			// traces up from leaf to root, putting nodes
+    			printStack.push(solution); 		// in correct order on the stack
+    			solution = solution.getParent();
+    		}
+    		
+    		int delay = 500;
+    		
+            while (!printStack.isEmpty()) {
+            	currNode = printStack.pop();
+                publish(currNode);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    System.out.println("Background interrupted");
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void process(List<EightPuzzleNode> nodes) {
+            EightPuzzleNode currNode = nodes.get(nodes.size() - 1);
+            view.updateMoveList("Empty space shifted: " + currNode.getAction());
+			model.updateTiles(currNode.getCurrentState());
+			view.setTiles(model.getCurrState());
+        }
+    }
 }

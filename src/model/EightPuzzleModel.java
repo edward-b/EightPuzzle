@@ -4,6 +4,8 @@ public class EightPuzzleModel {
 	
 	public static final int[][] goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 	private static int[][] currState;
+	private int zeroX;
+	private int zeroY;
 	
 	private static final int tileCount = 3; // height and width of the puzzle
 	
@@ -23,6 +25,18 @@ public class EightPuzzleModel {
 		int temp = currState[xi][yi];
 		currState[xi][yi] = currState[xj][yj];
 		currState[xj][yj] = temp;
+	}
+	
+	public void updateTiles(int[][] newState) {
+		for(int i = 0; i < tileCount; i++) {
+			for(int j = 0; j < tileCount; j++) {
+				currState[i][j] = newState[i][j]; 
+			}
+		}
+	}
+	
+	public void move(String str) {
+		
 	}
 	
 	private static void initTiles() {
@@ -76,6 +90,8 @@ public class EightPuzzleModel {
 	
 	public void generateNewPuzzle() {
 		currState = new int[tileCount][tileCount];
+		zeroX = 0;
+		zeroY = 0;
 		
 		// reset current state to goal state
 		for(int i = 0; i < tileCount; i++) {
@@ -93,6 +109,16 @@ public class EightPuzzleModel {
 			}
 			else {
 				swapTiles(tileCount - 2, tileCount - 1, tileCount - 1, tileCount - 1);
+			}
+		}
+		
+		for(int i = 0; i < tileCount; i++) {
+			for(int j = 0; j < tileCount; j++) {
+				if(currState[i][j] == 0) {
+					zeroX = i;
+					zeroY = j;
+					break;
+				}
 			}
 		}
 	}

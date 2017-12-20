@@ -20,69 +20,67 @@ public class EightPuzzleSearch {
 	 * AStarComparator.java.
 	 */
 	
-	public static void aStarSearch(EightPuzzleNode root) {
-		long startTime = System.nanoTime();
-		
-		if (root == null) {
-			return;
+	public static EightPuzzleNode aStarSearch(EightPuzzleNode root) {
+		if (root != null) {
+			long startTime = System.nanoTime();
+			int iteration = 0;
+			int space = 0;
+			// uses comparator that sorts priority queue by total path cost + number of misplaced tiles
+			Comparator<EightPuzzleNode> comparator = new AStarComparator();
+			PriorityQueue<EightPuzzleNode> pQueue = new PriorityQueue<EightPuzzleNode>(comparator);
+			pQueue.add(root);
+			
+			while(!pQueue.isEmpty()){
+		        EightPuzzleNode node = pQueue.poll();
+		        visited.add(node.generateNumberString());
+		        inQueue.remove(node.generateNumberString());
+		        
+		        if(node.isGoal()) {
+		        	iteration++;
+		        	long endTime = System.nanoTime();
+		        	long duration = (endTime - startTime);
+		        	
+		        	System.out.println("A* search (h = Manhattan distance) took: " + duration / 1000000 + " milliseconds.");
+		        	System.out.println("Path length: " + node.getDepth());
+		        	System.out.println("Path cost: " + node.pathCost());
+		        	System.out.println("Number of nodes popped off queue: " + iteration);
+		        	System.out.println("Maximum space used: " + space + " nodes.");
+		        	return node;
+		        }
+		        
+		        ArrayList<EightPuzzleNode> successors = node.generateSuccessors();
+		        
+		        for(EightPuzzleNode e : successors) {
+		        	String numberString = e.generateNumberString();
+		        	int costSoFar = e.pathCost();
+		        	
+		        	if(!visited.contains(numberString)) {
+		        		if(!inQueue.containsKey(numberString)) {
+		        			pQueue.add(e);
+		        			inQueue.put(numberString, costSoFar);
+		        			
+		        			int tempSize = pQueue.size();
+			        		if(tempSize > space) {
+			        			space = tempSize;
+			        		}
+		        		}
+		        		else if(costSoFar < inQueue.get(numberString)) {
+		        			pQueue.add(e);
+		        			inQueue.put(numberString, costSoFar);
+		        			
+		        			int tempSize = pQueue.size();
+			        		if(tempSize > space) {
+			        			space = tempSize;
+			        		}
+		        		}
+		        	}
+		        }
+		        
+		        iteration++;
+		    }
 		}
 		
-		int iteration = 0;
-		int space = 0;
-		// uses comparator that sorts priority queue by total path cost + number of misplaced tiles
-		Comparator<EightPuzzleNode> comparator = new AStarComparator();
-		PriorityQueue<EightPuzzleNode> pQueue = new PriorityQueue<EightPuzzleNode>(comparator);
-		pQueue.add(root);
-		
-		while(!pQueue.isEmpty()){
-	        EightPuzzleNode node = pQueue.poll();
-	        visited.add(node.generateNumberString());
-	        inQueue.remove(node.generateNumberString());
-	        
-	        if(node.isGoal()) {
-	        	iteration++;
-	        	long endTime = System.nanoTime();
-	        	long duration = (endTime - startTime);
-	        	
-	        	printSolution(node);
-	        	System.out.println("A* search (h = Manhattan distance) took: " + duration / 1000000 + " milliseconds.");
-	        	System.out.println("Path length: " + node.getDepth());
-	        	System.out.println("Path cost: " + node.pathCost());
-	        	System.out.println("Number of nodes popped off queue: " + iteration);
-	        	System.out.println("Maximum space used: " + space + " nodes.");
-	        	return;
-	        }
-	        
-	        ArrayList<EightPuzzleNode> successors = node.generateSuccessors();
-	        
-	        for(EightPuzzleNode e : successors) {
-	        	String numberString = e.generateNumberString();
-	        	int costSoFar = e.pathCost();
-	        	
-	        	if(!visited.contains(numberString)) {
-	        		if(!inQueue.containsKey(numberString)) {
-	        			pQueue.add(e);
-	        			inQueue.put(numberString, costSoFar);
-	        			
-	        			int tempSize = pQueue.size();
-		        		if(tempSize > space) {
-		        			space = tempSize;
-		        		}
-	        		}
-	        		else if(costSoFar < inQueue.get(numberString)) {
-	        			pQueue.add(e);
-	        			inQueue.put(numberString, costSoFar);
-	        			
-	        			int tempSize = pQueue.size();
-		        		if(tempSize > space) {
-		        			space = tempSize;
-		        		}
-	        		}
-	        	}
-	        }
-	        
-	        iteration++;
-	    }
+		return null;
 	}
 	
 	

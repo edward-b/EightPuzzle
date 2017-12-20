@@ -25,7 +25,7 @@ public class EightPuzzleGUI {
 	private JButton btnGenerateNewPuzzle  = new JButton("Generate New Puzzle");
 	private JButton btnSolvePuzzle = new JButton("Solve Puzzle");
 	private JLabel lblMoveList = new JLabel("Move List");
-	private JScrollPane moveList = new JScrollPane(new JTextArea());
+	private JScrollPane moveListPane = new JScrollPane(new JTextArea());
 	
 	/**
 	 * Create the application.
@@ -55,7 +55,7 @@ public class EightPuzzleGUI {
 		
 		springLayout.putConstraint(SpringLayout.NORTH, lblMoveList, 10, SpringLayout.NORTH, eightPuzzleFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, lblMoveList, 10, SpringLayout.EAST, eightPuzzlePanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, lblMoveList, -10, SpringLayout.NORTH, moveList);
+		springLayout.putConstraint(SpringLayout.SOUTH, lblMoveList, -10, SpringLayout.NORTH, moveListPane);
 		springLayout.putConstraint(SpringLayout.EAST, lblMoveList, -10, SpringLayout.EAST, eightPuzzleFrame.getContentPane());
 		lblMoveList.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMoveList.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -67,15 +67,12 @@ public class EightPuzzleGUI {
 		btnGenerateNewPuzzle.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		eightPuzzleFrame.getContentPane().add(btnGenerateNewPuzzle);
 		
-		springLayout.putConstraint(SpringLayout.WEST, moveList, 10, SpringLayout.EAST, eightPuzzlePanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, moveList, -190, SpringLayout.SOUTH, eightPuzzleFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, moveList, -10, SpringLayout.EAST, eightPuzzleFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.NORTH, btnGenerateNewPuzzle, 10, SpringLayout.SOUTH, moveList);
-		springLayout.putConstraint(SpringLayout.NORTH, moveList, 45, SpringLayout.NORTH, eightPuzzleFrame.getContentPane());
-		eightPuzzleFrame.getContentPane().add(moveList);
-		JViewport moveListView = moveList.getViewport();
-		JTextArea text = (JTextArea)moveListView.getView();
-		text.setEditable(false);
+		springLayout.putConstraint(SpringLayout.WEST, moveListPane, 10, SpringLayout.EAST, eightPuzzlePanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, moveListPane, -190, SpringLayout.SOUTH, eightPuzzleFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, moveListPane, -10, SpringLayout.EAST, eightPuzzleFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, btnGenerateNewPuzzle, 10, SpringLayout.SOUTH, moveListPane);
+		springLayout.putConstraint(SpringLayout.NORTH, moveListPane, 45, SpringLayout.NORTH, eightPuzzleFrame.getContentPane());
+		eightPuzzleFrame.getContentPane().add(moveListPane);
 		
 		springLayout.putConstraint(SpringLayout.NORTH, btnSolvePuzzle, 340, SpringLayout.NORTH, eightPuzzleFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, btnSolvePuzzle, 10, SpringLayout.EAST, eightPuzzlePanel);
@@ -86,8 +83,6 @@ public class EightPuzzleGUI {
 	}
 	
 	public void setTiles(int[][] currState) {
-		eightPuzzleFrame.setVisible(false);
-		
 		int tileCount = currState.length;
 		int[] temp = new int[tileCount * tileCount];
 		int count = 0;
@@ -116,8 +111,24 @@ public class EightPuzzleGUI {
 		
 		eightPuzzleFrame.setVisible(true);
 	}
+	
+	public void updateMoveList(String str) {
+		JViewport moveListView = moveListPane.getViewport();
+		JTextArea text = (JTextArea)moveListView.getView();
+		text.setEditable(false);
+		text.append(str + "\n");
+	}
+	
+	public void clearMoveList() {
+		JViewport moveListView = moveListPane.getViewport();
+		moveListView.removeAll();
+	}
 
 	public void addGenerateNewPuzzleListener(ActionListener listener) {
 		btnGenerateNewPuzzle.addActionListener(listener);
+	}
+	
+	public void addSolvePuzzleListener(ActionListener listener) {
+		btnSolvePuzzle.addActionListener(listener);
 	}
 }
