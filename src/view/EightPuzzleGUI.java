@@ -161,6 +161,24 @@ public class EightPuzzleGUI {
 		btnSolvePuzzle.setEnabled(false);
 	}
 	
+	public void enablePuzzlePanelButtons() {
+		Component[] buttons = eightPuzzlePanel.getComponents();
+		for(Component c : buttons) {
+			if(c instanceof JButton) {
+				c.setEnabled(true);
+			}
+		}
+	}
+	
+	public void disablePuzzlePanelButtons() {
+		Component[] buttons = eightPuzzlePanel.getComponents();
+		for(Component c : buttons) {
+			if(c instanceof JButton) {
+				c.setEnabled(false);
+			}
+		}
+	}
+	
 	public void addPuzzlePanelListener(ActionListener listener) {
 		for(Component c : eightPuzzlePanel.getComponents()) {
 			if(c instanceof JButton) {

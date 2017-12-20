@@ -53,6 +53,7 @@ public class EightPuzzleController {
 
         	view.disableGenerateNewPuzzleButton();
         	view.disableSolvePuzzleButton();
+        	view.disablePuzzlePanelButtons();
         	
         	EightPuzzleNode currNode = new EightPuzzleNode(3, model.getCurrState(), null, 0, "START");
 	        EightPuzzleNode solution = EightPuzzleSearch.aStarSearch(currNode);
@@ -78,6 +79,7 @@ public class EightPuzzleController {
             
             view.enableGenerateNewPuzzleButton();
             view.enableSolvePuzzleButton();
+            view.enablePuzzlePanelButtons();
             
             return null;
         }

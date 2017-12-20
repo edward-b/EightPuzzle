@@ -65,7 +65,7 @@ public class EightPuzzleModel {
 			}
 		}
 		
-		if(Math.abs((zeroX - tileX) + (zeroY - tileY)) == 1) {
+		if((Math.abs(zeroX - tileX) + Math.abs(zeroY - tileY)) == 1) {
 			swapTiles(zeroX, zeroY, tileX, tileY);
 			zeroX = tileX;
 			zeroY = tileY;
