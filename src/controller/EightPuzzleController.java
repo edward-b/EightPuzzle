@@ -22,34 +22,29 @@ public class EightPuzzleController {
 	}
 	
 	public void start() {
-		view.setTiles(model.getCurrState());
+		view.initializeTiles(model.getTileCount());
+		view.updateTiles(model.getCurrState());
+		
+		view.addPuzzlePanelListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		model.move(e.getActionCommand());
+	    		view.updateTiles(model.getCurrState());
+	    		}
+	    	});
 
 	    view.addGenerateNewPuzzleListener(new ActionListener(){
-	      public void actionPerformed(ActionEvent e) {
-	    	  view.clearMoveList();
-	    	  model.generateNewPuzzle();
-	    	  view.setTiles(model.getCurrState());
-	      }
-	    });
+	    	public void actionPerformed(ActionEvent e) {
+	    		view.clearMoveList();
+	    		model.generateNewPuzzle();
+	    		view.updateTiles(model.getCurrState());
+	    		}
+	      });
 	    
 	    view.addSolvePuzzleListener(new ActionListener() {
-	      public void actionPerformed(ActionEvent e) {
-	    	  (new PrintSolution()).execute();
-	      }
-	    });
-	    
-	    /*
-	    for (int i = 0; i < GamePiece.values().length; i++)
-	    {
-	      final GamePiece aPiece = GamePiece.values()[i];
-	      view.addPieceActionListener(aPiece, new ActionListener()
-	      {
-	        public void actionPerformed(ActionEvent e)
-	        {
-	          tileSelected(aPiece);
-	        }
-	      });
-	    }*/
+	    	public void actionPerformed(ActionEvent e) {
+	    		(new PrintSolution()).execute();
+	    		}
+	    	});
 	}
 	
     private class PrintSolution extends SwingWorker<Void, EightPuzzleNode> {
@@ -90,9 +85,14 @@ public class EightPuzzleController {
         @Override
         protected void process(List<EightPuzzleNode> nodes) {
             EightPuzzleNode currNode = nodes.get(nodes.size() - 1);
-            view.updateMoveList("Empty space shifted: " + currNode.getAction());
+            String curAction = currNode.getAction();
+            if(!curAction.equals("START")) {
+            	view.updateMoveList("Empty space shifted: " + curAction);
+            	model.updateZeroCoords(curAction);
+            }
 			model.updateTiles(currNode.getCurrentState());
-			view.setTiles(model.getCurrState());
+			view.updateTiles(model.getCurrState());
+			
         }
         
         @Override

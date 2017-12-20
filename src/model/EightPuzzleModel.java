@@ -33,7 +33,43 @@ public class EightPuzzleModel {
 		}
 	}
 	
+	public void updateZeroCoords(String str) {
+		switch(str) {
+			case "UP":
+				zeroX--;
+				break;
+			case "RIGHT":
+				zeroY++;
+				break;
+			case "DOWN":
+				zeroX++;
+				break;
+			case "LEFT":
+				zeroY--;
+				break;
+		}
+	}
+	
 	public void move(String str) {
+		int tile = Integer.parseInt(str);
+		int tileX = 0;
+		int tileY = 0;
+		
+		for(int i = 0; i < tileCount; i++) {
+			for(int j = 0; j < tileCount; j++) {
+				if(currState[i][j] == tile) {
+					tileX = i;
+					tileY = j;
+					break;
+				}
+			}
+		}
+		
+		if(Math.abs((zeroX - tileX) + (zeroY - tileY)) == 1) {
+			swapTiles(zeroX, zeroY, tileX, tileY);
+			zeroX = tileX;
+			zeroY = tileY;
+		}
 		
 	}
 	
@@ -53,6 +89,7 @@ public class EightPuzzleModel {
 			i--;
 		}
 	}
+	
 	private static int countInversions()
 	{
 		int inversions = 0;
@@ -82,6 +119,11 @@ public class EightPuzzleModel {
 	
 	private static boolean isSolvable() {
 		return (countInversions() % 2 == 0);
+	}
+	
+	public void resetZeroPosition() {
+		zeroX = tileCount - 1;
+		zeroY = tileCount - 1;
 	}
 	
 	public void generateNewPuzzle() {

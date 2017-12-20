@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import java.awt.Color;
+import java.awt.Component;
 
 public class EightPuzzleGUI {
 
@@ -85,9 +86,23 @@ public class EightPuzzleGUI {
 		moveListTextArea.setEditable(false);
 	}
 	
-	public void setTiles(int[][] currState) {
+	public void initializeTiles(int size) {
+		int tileCount = size * size;
+		JButton tempButton = new JButton();
+		
+		for(int i = 0; i < tileCount; i++) {
+			tempButton = new JButton("");
+			tempButton.setFont(new Font("Tahoma", Font.PLAIN, 72));
+			eightPuzzlePanel.add(tempButton);
+		}
+		
+		eightPuzzleFrame.setVisible(true);
+	}
+	
+	public void updateTiles(int[][] currState) {
 		int tileCount = currState.length;
-		int[] temp = new int[tileCount * tileCount];
+		int tempLength = tileCount * tileCount;
+		int[] temp = new int[tempLength];
 		int count = 0;
 		
 		for(int i = 0; i < tileCount; i++) {
@@ -97,18 +112,17 @@ public class EightPuzzleGUI {
 			}
 		}
 		
-		eightPuzzlePanel.removeAll();
-		
 		JButton tempButton = new JButton();
 		
-		for(int i = 0; i < temp.length; i++) {
+		for(int i = 0; i < tempLength; i++) {
+			tempButton = (JButton)eightPuzzlePanel.getComponent(i);
 			if(temp[i] != 0) {
-				tempButton = new JButton(Integer.toString(temp[i]));
-				tempButton.setFont(new Font("Tahoma", Font.PLAIN, 72));
-				eightPuzzlePanel.add(tempButton);
+				tempButton.setText(Integer.toString(temp[i]));
+				tempButton.setVisible(true);
 			}
 			else {
-				eightPuzzlePanel.add(new JLabel(""));
+				tempButton.setText("");
+				tempButton.setVisible(false);
 			}
 		}
 		
@@ -145,5 +159,13 @@ public class EightPuzzleGUI {
 	
 	public void disableSolvePuzzleButton() {
 		btnSolvePuzzle.setEnabled(false);
+	}
+	
+	public void addPuzzlePanelListener(ActionListener listener) {
+		for(Component c : eightPuzzlePanel.getComponents()) {
+			if(c instanceof JButton) {
+				((JButton)c).addActionListener(listener);
+			}
+		}
 	}
 }
