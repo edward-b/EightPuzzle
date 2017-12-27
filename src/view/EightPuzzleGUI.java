@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
@@ -127,6 +128,10 @@ public class EightPuzzleGUI {
 		}
 		
 		eightPuzzleFrame.setVisible(true);
+	}
+	
+	public void displaySolutionMessage() {
+		JOptionPane.showMessageDialog(eightPuzzleFrame, "Puzzle solved!", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void updateMoveList(String str) {

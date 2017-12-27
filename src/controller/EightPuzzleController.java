@@ -22,13 +22,22 @@ public class EightPuzzleController {
 	}
 	
 	public void start() {
-		view.initializeTiles(model.getTileCount());
-		view.updateTiles(model.getCurrState());
+		view.initializeTiles(model.getSize());
+		view.updateTiles(model.getCurrentState());
 		
 		view.addPuzzlePanelListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		model.move(e.getActionCommand());
-	    		view.updateTiles(model.getCurrState());
+	    		String action = model.move(e.getActionCommand());
+	    		if(!action.isEmpty()) {
+	    			view.updateMoveList("Empty tile shifted: " + action);
+	    		}
+	    		view.updateTiles(model.getCurrentState());
+	    		if(model.isSolved()) {
+	    			view.displaySolutionMessage();
+	    			view.clearMoveList();
+		    		model.generateNewPuzzle();
+		    		view.updateTiles(model.getCurrentState());
+	    		}
 	    		}
 	    	});
 
@@ -36,7 +45,7 @@ public class EightPuzzleController {
 	    	public void actionPerformed(ActionEvent e) {
 	    		view.clearMoveList();
 	    		model.generateNewPuzzle();
-	    		view.updateTiles(model.getCurrState());
+	    		view.updateTiles(model.getCurrentState());
 	    		}
 	      });
 	    
@@ -55,7 +64,7 @@ public class EightPuzzleController {
         	view.disableSolvePuzzleButton();
         	view.disablePuzzlePanelButtons();
         	
-        	EightPuzzleNode currNode = new EightPuzzleNode(3, model.getCurrState(), null, 0, "START");
+        	EightPuzzleNode currNode = new EightPuzzleNode(3, model.getCurrentState(), model.getGoalState(), null, 0, "START");
 	        EightPuzzleNode solution = EightPuzzleSearch.aStarSearch(currNode);
 	        
         	Stack<EightPuzzleNode> printStack = new Stack<EightPuzzleNode>();
@@ -80,6 +89,7 @@ public class EightPuzzleController {
             view.enableGenerateNewPuzzleButton();
             view.enableSolvePuzzleButton();
             view.enablePuzzlePanelButtons();
+            view.updateMoveList("End of generated solution.");
             
             return null;
         }
@@ -89,17 +99,11 @@ public class EightPuzzleController {
             EightPuzzleNode currNode = nodes.get(nodes.size() - 1);
             String curAction = currNode.getAction();
             if(!curAction.equals("START")) {
-            	view.updateMoveList("Empty space shifted: " + curAction);
+            	view.updateMoveList("Empty tile shifted: " + curAction);
             	model.updateZeroCoords(curAction);
             }
 			model.updateTiles(currNode.getCurrentState());
-			view.updateTiles(model.getCurrState());
-			
-        }
-        
-        @Override
-        protected void done() {
-        	
+			view.updateTiles(model.getCurrentState());
         }
     }
 }

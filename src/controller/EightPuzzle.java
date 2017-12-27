@@ -2,6 +2,14 @@ package controller;
 
 import java.awt.*;
 
+/**
+ * EightPuzzle is the driver program that creates the GUI,
+ * logic, and controller for the 8-puzzle, in accordance
+ * with the MVC design pattern.
+ * 
+ * @author Edward B.
+ */
+
 import view.EightPuzzleGUI;
 import model.EightPuzzleModel;
 
