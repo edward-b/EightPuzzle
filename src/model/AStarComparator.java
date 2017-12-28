@@ -1,11 +1,21 @@
 package model;
 import java.util.Comparator;
 
+/**
+ * AStarComparator is a comparator used for EightPuzzleSearch to
+ * compare the Manhattan distance between two EightPuzzleNodes.
+ * 
+ * @author Edward B.
+ */
+
 public class AStarComparator implements Comparator<EightPuzzleNode>
 {
-	/*
-	 * Comparator used in A* search with Manhattan distance
-	 * being used as the heuristic.
+	/**
+	 * Overridden compare() method that compares the
+	 * Manhattan distance between two EightPuzzleNodes.
+	 * 
+	 * @param x The first node to be compared
+	 * @param y The second node to be compared
 	 */
 	
     @Override

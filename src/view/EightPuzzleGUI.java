@@ -19,6 +19,13 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
 
+/**
+ * The GUI for the puzzle. Layout is scaled with a SpringLayout
+ * and listeners are added to interact with the EightPuzzleController.
+ * 
+ * @author Edward B.
+ */
+
 public class EightPuzzleGUI {
 
 	private JFrame eightPuzzleFrame = new JFrame();
@@ -31,14 +38,17 @@ public class EightPuzzleGUI {
 	private JTextArea moveListTextArea = (JTextArea)moveListView.getView();
 	
 	/**
-	 * Create the application.
+	 * Constructor that creates a window for the puzzle.
 	 */
 	public EightPuzzleGUI() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initializes the contents of the frame.
+	 * Creates the window, puzzle panel, buttons, and move list.
+	 * 
+	 * @return Nothing
 	 */
 	private void initialize() {
 		eightPuzzleFrame.setResizable(false);
@@ -87,6 +97,16 @@ public class EightPuzzleGUI {
 		moveListTextArea.setEditable(false);
 	}
 	
+	/**
+	 * Initializes the tiles as buttons on a square
+	 * GridLayout. Empty tile is represented as an
+	 * invisible button.
+	 * 
+	 * @param size The size of the board
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void initializeTiles(int size) {
 		int tileCount = size * size;
 		JButton tempButton = new JButton();
@@ -99,6 +119,16 @@ public class EightPuzzleGUI {
 		
 		eightPuzzleFrame.setVisible(true);
 	}
+	
+	/**
+	 * Updates the puzzle panel to represent the current state of the board
+	 * by reorganizing the buttons and changing which are visible and what
+	 * numbers they display.
+	 * 
+	 * @param currState The state that the puzzle panel has to be updated to
+	 * 
+	 * @return Nothing
+	 */
 	
 	public void updateTiles(int[][] currState) {
 		int tileCount = currState.length;
@@ -130,41 +160,126 @@ public class EightPuzzleGUI {
 		eightPuzzleFrame.setVisible(true);
 	}
 	
+	/**
+	 * Displays a solution pop up window when a puzzle is manually solved.
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void displaySolutionMessage() {
 		JOptionPane.showMessageDialog(eightPuzzleFrame, "Puzzle solved!", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
 	}
+	
+	/**
+	 * Updates the move list with the specified text.
+	 * 
+	 * @param str The text to be inserted in the move list
+	 * 
+	 * @return Nothing
+	 */
 	
 	public void updateMoveList(String str) {
 		moveListTextArea.append(str + "\n");
 	}
 	
+	/**
+	 * Empties the move list
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void clearMoveList() {
 		moveListTextArea.setText("");
 	}
-
+	
+	/**
+	 * Creates an ActionListener to listen for when the
+	 * "Generate New Puzzle" button is pressed.
+	 * 
+	 * @param listener Listener for button presses
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void addGenerateNewPuzzleListener(ActionListener listener) {
 		btnGenerateNewPuzzle.addActionListener(listener);
 	}
+	
+	/**
+	 * Enables the "Generate New Puzzle" button.
+	 * 
+	 * @return Nothing
+	 */
 	
 	public void enableGenerateNewPuzzleButton() {
 		btnGenerateNewPuzzle.setEnabled(true);
 	}
 	
+	/**
+	 * Disables the "Generate New Puzzle" button.
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void disableGenerateNewPuzzleButton() {
 		btnGenerateNewPuzzle.setEnabled(false);
 	}
+	
+	/**
+	 * Creates an ActionListener for when the "Solve Puzzle"
+	 * button is pressed.
+	 * 
+	 * @param listener Listener for button presses
+	 * 
+	 * @return Nothing
+	 */
 	
 	public void addSolvePuzzleListener(ActionListener listener) {
 		btnSolvePuzzle.addActionListener(listener);
 	}
 	
+	/**
+	 * Enables the "Solve Puzzle" button.
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void enableSolvePuzzleButton() {
 		btnSolvePuzzle.setEnabled(true);
 	}
 	
+	/**
+	 * Disables the "Solve Puzzle" button.
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void disableSolvePuzzleButton() {
 		btnSolvePuzzle.setEnabled(false);
 	}
+	
+	/**
+	 * Creates an ActionListener to listen for when buttons
+	 * representing tiles on the puzzle panel are pressed.
+	 * 
+	 * @param listener Listener for button presses
+	 * 
+	 * @return Nothing
+	 */
+	
+	public void addPuzzlePanelListener(ActionListener listener) {
+		for(Component c : eightPuzzlePanel.getComponents()) {
+			if(c instanceof JButton) {
+				((JButton)c).addActionListener(listener);
+			}
+		}
+	}
+	
+	/**
+	 * Enables all tiles on the puzzle panel.
+	 * 
+	 * @return Nothing
+	 */
 	
 	public void enablePuzzlePanelButtons() {
 		Component[] buttons = eightPuzzlePanel.getComponents();
@@ -175,19 +290,17 @@ public class EightPuzzleGUI {
 		}
 	}
 	
+	/**
+	 * Disables all tiles on the puzzle panel.
+	 * 
+	 * @return Nothing
+	 */
+	
 	public void disablePuzzlePanelButtons() {
 		Component[] buttons = eightPuzzlePanel.getComponents();
 		for(Component c : buttons) {
 			if(c instanceof JButton) {
 				c.setEnabled(false);
-			}
-		}
-	}
-	
-	public void addPuzzlePanelListener(ActionListener listener) {
-		for(Component c : eightPuzzlePanel.getComponents()) {
-			if(c instanceof JButton) {
-				((JButton)c).addActionListener(listener);
 			}
 		}
 	}

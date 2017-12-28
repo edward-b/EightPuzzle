@@ -4,9 +4,12 @@ import java.util.ArrayList;
 /**
  * EightPuzzleNode is an object used to store moves in a solution
  * to an 8-puzzle, usually used by EightPuzzleSearch. 
+ * 
  * @author Edward B.
  */
+
 public class EightPuzzleNode {
+	
 	private EightPuzzleNode parent;
 	private int[][] currentState;
 	private int[][] goalState;
@@ -22,17 +25,44 @@ public class EightPuzzleNode {
 	 * 
 	 * @param size This is the dimensions (height and width) of the board
 	 * @param current This is the current state of the board
-	 * @param p This is the parent of this node, which holds the previous state of the board
+	 * @param parent This is the parent of this node, which holds the previous state of the board
 	 * @param cost This is the cost of the action taken to get to the current state, used for A* search
 	 * @param action This is the direction the empty tile shifted to get to the current state
 	 * 
 	 * @author Edward B.
 	 */
 	
-	public EightPuzzleNode(int size, int[][] current, int[][]goalState, EightPuzzleNode p, int cost, String action) {
-		this.size = size;
-		this.action = action;
-		this.cost = cost;
+	public EightPuzzleNode(int size, int[][] current, int[][]goal, EightPuzzleNode parent, int cost, String action) {
+		setSize(size);
+		setCurrentState(current);
+		setGoalState(goal);
+		setParent(parent);
+		setCost(cost);
+		setAction(action);
+		setDepth();
+		setManhattanDistance();
+	}
+	
+	/**
+	 * Sets the width and height of this node's board.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setSize(int s) {
+		assert(s > 1);
+		
+		size = s;
+	}
+	
+	/**
+	 * Sets this node's current state.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setCurrentState(int[][] current) {
+		assert current != null;
 		
 		currentState = new int[size][size];
 		
@@ -41,29 +71,87 @@ public class EightPuzzleNode {
 				currentState[i][j] = current[i][j];
 			}
 		}
+	}
+	
+	/**
+	 * Sets this node's goal state.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setGoalState(int[][] goal) {
+		assert goal != null;
 		
-		manhattanDistance = setManhattanDistance();
+		goalState = new int[size][size];
 		
-		if (p == null) {
-			parent = null;
-			depth = 0;
-		}
-		else {
-			parent = p;
-			depth = p.getDepth() + 1;
+		for(int i = 0; i < size; i++) {
+			for(int j = 0; j < size; j++) {
+				goalState[i][j] = goal[i][j];
+			}
 		}
 	}
 	
+	/**
+	 * Sets the parent of this node to e.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setParent(EightPuzzleNode e) {
+		parent = e;
+	}
+	
+	/**
+	 * Sets the cost of the action taken to result in this node's current state.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setCost (int c) {
+		assert c >= 0;
+		
+		cost = c;
+	}
+	
+	/**
+	 * Sets the action taken to result in this node's current state.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setAction(String str) {
+		assert str.equals("START") || str.equals("UP")
+				|| str.equals("DOWN") || str.equals("LEFT")
+				|| str.equals("RIGHT");
+		
+		action = str;
+	}
+	
+	/**
+	 * Sets the current depth of the node to be 0 if this is the root
+	 * or the parent node's depth plus 1.
+	 * 
+	 * @return Nothing
+	 */
+	
+	private void setDepth() {
+		if (parent == null) {
+			depth = 0;
+		}
+		else {
+			depth = parent.getDepth() + 1;
+		}
+	}
 	
 	/**
 	 * Calculates the Manhattan distance, or absolute value of the distance
 	 * each tile needs to travel vertically and horizontally to get to the
 	 * goal position.
 	 * 
-	 * @return int This returns the sum of the Manhattan distance of every tile
+	 * @return Nothing
 	 */
 	
-	private int setManhattanDistance() {
+	private void setManhattanDistance() {
 		int sum = 0;
 		
 		for(int i = 0; i < size; i++) {
@@ -77,7 +165,83 @@ public class EightPuzzleNode {
 			}
 		}
 		
-		return sum;
+		manhattanDistance = sum;
+	}
+	
+	/**
+	 * Returns the width and height of this node
+	 * 
+	 * @return int This node's size
+	 */
+	
+	public int getSize() {
+		return size;
+	}
+	
+	/**
+	 * Returns a copy of this node's currentState
+	 * 
+	 * @return int[][] Copy of the board's current state
+	 */
+	
+	public int[][] getCurrentState() {
+		int[][] temp = new int[size][size];
+		
+		for(int i = 0; i < size; i++) {
+			for(int j = 0; j < size; j++) {
+				temp[i][j] = currentState[i][j];
+			}
+		}
+		
+		return temp;
+	}
+	
+	/**
+	 * Returns a copy of this node's goalState
+	 * 
+	 * @return int[][] Copy of the board's goal state
+	 */
+	
+	public int[][] getGoalState() {
+		int[][] temp = new int[size][size];
+		
+		for(int i = 0; i < size; i++) {
+			for(int j = 0; j < size; j++) {
+				temp[i][j] = goalState[i][j];
+			}
+		}
+		
+		return temp;
+	}
+	
+	/**
+	 * Returns the parent, or previous state, of this node
+	 * 
+	 * @return EightPuzzleNode This node's parent
+	 */
+	
+	public EightPuzzleNode getParent() {
+		return parent;
+	}
+	
+	/**
+	 * Returns the cost of this node
+	 * 
+	 * @return int This node's cost
+	 */
+	
+	public int getCost() {
+		return cost;
+	}
+	
+	/**
+	 * Returns the action that resulted in this node's current state.
+	 * 
+	 * @return String This node's action
+	 */
+	
+	public String getAction() {
+		return action;
 	}
 	
 	/**
@@ -89,7 +253,10 @@ public class EightPuzzleNode {
 	 * @return int[] These are the array indices, or coordinates of the target in state
 	 */
 	
-	public int[] getCoordinates(int target, int[][]state) {
+	private int[] getCoordinates(int target, int[][]state) {
+		assert (target >= 0) && (target < (size * size));
+		assert (state != null) && (state[0].length == size);
+		
 		int[] coordinates = new int[2];
 		
 		for(int i = 0; i < size; i++) { //i
@@ -102,6 +269,26 @@ public class EightPuzzleNode {
 		}
 		
 		return coordinates;
+	}
+	
+	/**
+	 * Returns the current node's depth.
+	 * 
+	 * @return int This node's depth
+	 */
+	
+	public int getDepth() {
+		return depth;
+	}
+	
+	/**
+	 * Returns the Manhattan distance of this node
+	 * 
+	 * @return int This node's Manhattan distance
+	 */
+	
+	public int getManhattanDistance() {
+		return manhattanDistance;
 	}
 	
 	/**
@@ -146,7 +333,17 @@ public class EightPuzzleNode {
 	 * @return Nothing
 	 */
 	
-	private void newSuccessor(int x1, int y1, int x2, int y2, ArrayList<EightPuzzleNode> storage, String act) {
+	private void newSuccessor(int x1, int y1, int x2, int y2,
+			ArrayList<EightPuzzleNode> storage, String act) {
+		assert (x1 >= 0) && (x1 < size);
+		assert (x2 >= 0) && (x2 < size);
+		assert (y1 >= 0) && (y1 < size);
+		assert (y2 >= 0) && (y2 < size);
+		assert storage != null;
+		assert act.equals("UP") || act.equals("DOWN")
+				|| act.equals("LEFT") || act.equals("RIGHT");
+		
+		
 		int[][] stateCopy = new int[size][size];
 		int[][] goalCopy = new int[size][size];
 		
@@ -184,22 +381,23 @@ public class EightPuzzleNode {
 	
 	@Override
 	public boolean equals(Object other) {
+		boolean result = false;
+		
 		if(other instanceof EightPuzzleNode) {
+			result = true;
 			EightPuzzleNode o = (EightPuzzleNode) other;
 			int[][] otherState = o.getCurrentState();
 			
 			for(int i = 0; i < size; i++) {
 				for(int j = 0; j < size; j++) {
 					if(currentState[i][j] != otherState[i][j]) {
-						return false;
+						result = false;
 					}
 				}
 			}
-			
-			return true;
 		}
 		
-		return false;
+		return result;
 	}
 	
 	/**
@@ -210,15 +408,17 @@ public class EightPuzzleNode {
 	 */
 	
 	public boolean isGoal() {
+		boolean result = true;
+		
 		for(int i = 0; i < size; i++) {
 			for(int j = 0; j < size; j++) {
 				if(currentState[i][j] != goalState[i][j]) {
-					return false;
+					result = false;
 				}
 			}
 		}
 		
-		return true;
+		return result;
 	}
 	
 	/**
@@ -258,73 +458,5 @@ public class EightPuzzleNode {
 		}
 		
 		return sb.toString();
-	}
-	
-	/**
-	 * Returns a copy of this node's currentState
-	 * 
-	 * @return int[][] Copy of the board's current state
-	 */
-	
-	public int[][] getCurrentState() {
-		int[][] temp = new int[3][3];
-		
-		for(int i = 0; i < size; i++) {
-			for(int j = 0; j < size; j++) {
-				temp[i][j] = currentState[i][j];
-			}
-		}
-		
-		return temp;
-	}
-	
-	/**
-	 * Returns the current node's depth.
-	 * 
-	 * @return int This node's depth
-	 */
-	
-	public int getDepth() {
-		return depth;
-	}
-	
-	/**
-	 * Returns the Manhattan distance of this node
-	 * 
-	 * @return int This node's Manhattan distance
-	 */
-	
-	public int getManhattanDistance() {
-		return manhattanDistance;
-	}
-	
-	/**
-	 * Returns the parent, or previous state, of this node
-	 * 
-	 * @return EightPuzzleNode This node's parent
-	 */
-	
-	public EightPuzzleNode getParent() {
-		return parent;
-	}
-	
-	/**
-	 * Returns the cost of this node
-	 * 
-	 * @return int This node's cost
-	 */
-	
-	public int getCost() {
-		return cost;
-	}
-	
-	/**
-	 * Returns the action that resulted in this node's current state.
-	 * 
-	 * @return String This node's action
-	 */
-	
-	public String getAction() {
-		return action;
 	}
 }

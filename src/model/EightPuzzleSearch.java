@@ -17,6 +17,8 @@ public class EightPuzzleSearch {
 	 * a custom comparator (found in AStarComparator) to order the
 	 * queue by Manhattan distance and path cost.
 	 * 
+	 * @param root The root of the EightPuzzleNode tree to search through
+	 * 
 	 * @return EightPuzzleNode The leaf of the path of nodes that are a solution to the puzzle
 	 */
 	
@@ -46,14 +48,9 @@ public class EightPuzzleSearch {
 		        	int costSoFar = e.pathCost();
 		        	
 		        	if(!previouslyVisited.contains(numberString)) {
-		        		if(!inQueue.containsKey(numberString)) {
-		        			pQueue.add(e);
-		        			inQueue.put(numberString, costSoFar);
-		        		}
-		        		else if(costSoFar < inQueue.get(numberString)) {
-		        			pQueue.add(e);
-		        			inQueue.put(numberString, costSoFar);
-		        		}
+		        		pQueue.add(e);
+		        		inQueue.put(numberString, costSoFar);
+		        		
 		        	}
 		        }
 		    }
